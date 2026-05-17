@@ -1,0 +1,191 @@
+import { useState } from "react"; import { Wallet, Gift, Rocket, Users } from "lucide-react";
+
+export default function PhantomAirdropWebsite() { const [connected, setConnected] = useState(false); const [walletAddress, setWalletAddress] = useState("");
+
+const openPhantom = () => { const phantomUrl = "https://phantom.app/ul/browse/" + encodeURIComponent(window.location.href);
+
+window.location.href = phantomUrl;
+
+};
+
+const connectPhantom = async () => { const provider = window?.phantom?.solana;
+
+if (!provider || !provider.isPhantom) {
+  openPhantom();
+  return;
+}
+
+try {
+  const provider = window?.phantom?.solana;
+
+  if (!provider || !provider.isPhantom) {
+    alert("Phantom Wallet belum terinstall!");
+    window.open("https://phantom.app/", "_blank");
+    return;
+  }
+
+  const response = await provider.connect();
+  setWalletAddress(response.publicKey.toString());
+  setConnected(true);
+} catch (error) {
+  console.error(error);
+  alert("Gagal connect ke Phantom Wallet");
+}
+
+};
+
+const tasks = [ { title: "Follow Twitter", reward: "+20 Points", }, { title: "Join Telegram", reward: "+15 Points", }, { title: "Invite Friends", reward: "+50 Points", }, ];
+
+return ( <div className="min-h-screen bg-black text-white overflow-hidden"> <header className="border-b border-zinc-800 bg-black/90 backdrop-blur sticky top-0 z-50"> <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between"> <div> <h1 className="text-2xl font-black tracking-wide"> AIR<span className="text-purple-400">DROP</span>X </h1> </div>
+
+<div>
+        {!connected ? (
+          <button
+            onClick={connectPhantom}
+            className="bg-purple-500 hover:bg-purple-400 transition px-5 py-3 rounded-2xl font-bold flex items-center gap-2"
+          >
+            <Wallet size={18} />
+            Connect Phantom
+          </button>
+        ) : (
+          <div className="bg-zinc-900 border border-zinc-700 px-4 py-3 rounded-2xl text-sm text-green-400 font-semibold">
+            {walletAddress.slice(0, 4)}...
+            {walletAddress.slice(-4)}
+          </div>
+        )}
+      </div>
+    </div>
+  </header>
+
+  <section className="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-16 items-center">
+    <div>
+      <div className="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-500/30 text-purple-300 px-4 py-2 rounded-full mb-6">
+        <Rocket size={16} />
+        Solana Ecosystem Airdrop
+      </div>
+
+      <h2 className="text-6xl font-black leading-tight mb-6">
+        Mining Airdrop
+        <br />
+        Generasi Baru
+      </h2>
+
+      <p className="text-zinc-400 text-lg leading-relaxed mb-8 max-w-xl">
+        Connect Phantom Wallet untuk mulai mengumpulkan point,
+        menyelesaikan task komunitas, dan mendapatkan kesempatan
+        reward airdrop ecosystem Solana.
+      </p>
+
+      <div className="flex flex-wrap gap-4">
+        <button
+          onClick={connectPhantom}
+          className="bg-purple-500 hover:scale-105 transition px-7 py-4 rounded-2xl font-bold text-lg"
+        >
+          Start Mining
+        </button>
+
+        <button className="border border-zinc-700 hover:bg-zinc-900 transition px-7 py-4 rounded-2xl font-semibold text-lg">
+          Join Community
+        </button>
+      </div>
+    </div>
+
+    <div className="relative">
+      <div className="absolute inset-0 bg-purple-500 blur-3xl opacity-20 rounded-full"></div>
+
+      <div className="relative bg-zinc-900 border border-zinc-800 rounded-[32px] p-8 shadow-2xl">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <p className="text-zinc-500 text-sm">Current Reward Pool</p>
+            <h3 className="text-4xl font-black mt-2">$250,000</h3>
+          </div>
+
+          <Gift className="text-purple-400" size={40} />
+        </div>
+
+        <div className="space-y-5">
+          <div>
+            <div className="flex justify-between mb-2 text-sm">
+              <span className="text-zinc-400">Mining Progress</span>
+              <span className="text-purple-400">78%</span>
+            </div>
+
+            <div className="h-3 bg-zinc-800 rounded-full overflow-hidden">
+              <div className="h-full w-3/4 bg-purple-500 rounded-full"></div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 mt-6">
+            <div className="bg-black border border-zinc-800 rounded-2xl p-5">
+              <p className="text-zinc-500 text-sm">Participants</p>
+              <h4 className="text-2xl font-bold mt-2">125K+</h4>
+            </div>
+
+            <div className="bg-black border border-zinc-800 rounded-2xl p-5">
+              <p className="text-zinc-500 text-sm">Network</p>
+              <h4 className="text-2xl font-bold mt-2">Solana</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section className="max-w-7xl mx-auto px-6 py-12">
+    <div className="flex items-center gap-3 mb-10">
+      <Users className="text-purple-400" />
+      <h3 className="text-4xl font-black">Complete Tasks</h3>
+    </div>
+
+    <div className="grid md:grid-cols-3 gap-6">
+      {tasks.map((task, index) => (
+        <div
+          key={index}
+          className="bg-zinc-900 border border-zinc-800 hover:border-purple-500 transition rounded-3xl p-7"
+        >
+          <div className="flex justify-between items-center mb-6">
+            <div className="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-sm font-bold">
+              Task #{index + 1}
+            </div>
+
+            <span className="text-green-400 font-bold">
+              {task.reward}
+            </span>
+          </div>
+
+          <h4 className="text-2xl font-bold mb-4">{task.title}</h4>
+
+          <button className="w-full bg-purple-500 hover:bg-purple-400 transition py-3 rounded-2xl font-bold mt-4">
+            Complete
+          </button>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section className="max-w-7xl mx-auto px-6 py-24">
+    <div className="bg-gradient-to-r from-purple-500/20 to-fuchsia-500/10 border border-purple-500/20 rounded-[40px] p-12 text-center">
+      <h3 className="text-5xl font-black mb-6">
+        Ready To Farm?
+      </h3>
+
+      <p className="text-zinc-400 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+        Connect Phantom Wallet dan mulai kumpulkan point airdrop kamu
+        sekarang juga.
+      </p>
+
+      <button
+        onClick={connectPhantom}
+        className="bg-white text-black hover:scale-105 transition px-8 py-4 rounded-2xl font-black text-lg"
+      >
+        Connect Wallet
+      </button>
+    </div>
+  </section>
+
+  <footer className="border-t border-zinc-800 py-8 text-center text-zinc-500">
+    © 2026 AIRDROPX — Solana Community Mining Platform
+  </footer>
+</div>
+
+); }
